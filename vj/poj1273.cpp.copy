@@ -1,0 +1,93 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+const int maxx = 200+5;
+
+int edge[maxx][maxx];
+int level[maxx];
+
+/*
+	Dinic 实际上就是Edmonds-Karp的改进， 可以看到每次Dinic选出的路径实际上都可以由Edmonds-Karp选出
+*/
+
+bool bfs(int m)	// get level,and if not get 
+{
+	
+	int que[maxx];
+	int front = 0,tail = 0; // 0--maxx-1	front指向下一个添加元素的位置，tail表示最后一个元素的位置
+	que[front++] = 0;
+	bool flag= false;
+	memset(level,-1,sizeof(level));
+	level[0] = 0;
+	while(front != tail )
+	{
+		int next_point;
+		next_point = que[tail];
+		tail = (tail+1)%maxx;
+		for(int i=0;i<m;i++){
+			if(edge[next_point][i]>0&&level[i] == -1){
+				level[i] = level[next_point] + 1;	// 维护level
+				que[front] = i;
+				front = (front + 1)%maxx;
+				if(i == m-1){	// 证明存在流可以推到终点
+					flag = true;
+				}
+			}
+		}
+	}
+
+	return flag;
+}
+
+
+int dfs(int node,int m,int cap)		// 用于查找点node能推不大于cap的流量，这个cap表示源点到当前点的位置最多能输出的流量，是一种限制！dfs表示在cap的限制下从当前点能推多少流!
+{
+	if (node == m-1){
+		/*
+			cap = min(cap, edge[node][m-1]);	//
+			edge[node][m-1] -= cap;
+			edge[m-1][node] += cap;
+		*/
+		return cap;
+	}
+	int ans=0;
+	int flow = 0;
+	for(int i=0;i<m;i++){
+		if(edge[node][i]>0&&level[node]+1 == level[i]){
+			flow = dfs(i,m,min(edge[node][i],cap));		// 注意这个flow一定不会大于cap，因为这个已经在程序中限制住了！
+			edge[node][i] -= flow;
+			edge[i][node] += flow;
+			ans += flow;
+			cap -= flow;
+		}
+	}
+
+	return ans;
+}
+
+int solve(int n,int m)
+{
+	int ans=0;
+	while(bfs(m))
+	{
+		ans += dfs(0,m,(int)1e8);	
+	}
+
+	return ans;
+}
+
+int main()
+{
+	int n,m;
+	while(scanf("%d%d",&n,&m)==2){
+		memset(edge,0,sizeof(edge));
+		for(int i=0;i<n;i++){
+			int x,y;
+			cin>>x>>y;
+			x--,y--;
+			cin>>edge[x][y];
+		}
+		cout<<solve(n,m)<<endl;
+	}
+	return 0;
+}
