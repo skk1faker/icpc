@@ -1,6 +1,7 @@
 /*
 1. 反向bfs，从终点bfs，就可以解决多个源点一个终点的问题
 2. 康托展开，实际上就是一个字典序的问题，可以看刘汝佳第十章的编码和解码的那个问题
+https://zhuanlan.zhihu.com/p/272721663
 */
 #include<iostream>
 #include<cstring>

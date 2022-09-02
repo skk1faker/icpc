@@ -1,17 +1,25 @@
-#include<map>
-#include<set>
+//安装libpcap的方法
+//https://www.csdn.net/tags/MtTaEg5sNTYwMDgtYmxvZwO0O0OO0O0O.html
+
 #include<iostream>
-#include<cstring>
+#include<cstdio>
+
 using namespace std;
+
+int dir_move[5][2] = {{1,0},{-1,0},{0,1},{0,-1},{0,0}};
 int main()
 {
+    int a = 1;
+    int b = 1;
+    int c = 1;
+    for(int i = 0;i<5;i++){
+        cout<<dir_move[i][0]<<' '<<dir_move[i][1]<<endl;
+    }
+    double d = -1.0 * c / (a - b);
+    double e = 2.0 * c / (a - b);
+    cout<<(d < e)<<endl;
+    cout<< (d > 1e18)<<endl;
+    cout<<d<<endl;
 
-	int a[][2][4] = {{{1,2},{3,4}},{{1,2,3,4},{5,6,7,8}}};
-	for(int i=0 ;i<2;i++){
-		for(int j=0;j<4;j++){
-			cout<<a[0][i][j];
-		}cout<<endl;
-	}
-
-		
+    return 0;
 }
