@@ -9,6 +9,14 @@ bool justify(int i, int x[]) {
 }
 int main() {
   srand((int)time(0));
-  long long temp = (rand() % ((long long )1e9 - 1))  * (long long)(1e3) + (rand() % (long long )1e3);
-  printf("%lld",temp);
+  int n,k,d;
+  n = rand() % 100 + 1;
+  k = rand() % n + 1;
+  d = rand() % 100;
+  printf("%d %d %d\n",n,k,d);
+  for(int i =0 ;i < n;i++){
+    int temp = rand() % ((int)1e9 + 1);
+    printf("%d ",temp);
+  }
+
 }

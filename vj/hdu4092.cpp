@@ -1,15 +1,8 @@
-/* 首先需要建立坐标系，这个坐标系能唯一的确定一个三角形，如下所示
- * 我真的不知道作者怎么能设计出这样一个坐标系！！！！日！
- */
-
-/*
- * 将查找到的图案通过旋转然后使用hash记录，如果只通过交换坐标值来进行旋转（就是x，y，z轴互换）注意000旋转之后还是000，所以我们是绕着000进行旋转。
- */
 #include <algorithm>
 #include <iostream>
 #include <set>
 #include <vector>
-#define make_table 0
+#define make_table 1
 using namespace std;
 const int maxx = 18;
 class Triangle {
@@ -30,13 +23,14 @@ public:
     return true;
   }
   void extend(int edge) {
-    int d_val = ((x[0] + x[1] + x[2]) == 0) ? 1 : -1;
+    int d_val = ((x[0] + x[1] + x[2]) == -1) ? 1 : -1;
     for (int i = 0; i < 3; i++) {
       if (i == edge)
         continue;
       x[i] += d_val;
     }
   };
+  /*
   void rotate_180() { // 绕着0，0，0的底边中(0, 0.5, 0.5)点进行旋转
     x[0] = -x[0];
     x[1] = 1 - x[1];
@@ -48,10 +42,12 @@ public:
     x[1] = x[2];
     x[2] = temp;
   }
+  */
   void moveto(int *x_) {
     for (int i = 0; i < 3; i++) {
       x[i] -= x_[i];
     }
+    x[0] += 1;
   }
   void get_x(int *x_) {
     for (int i = 0; i < 3; i++) {
@@ -60,12 +56,14 @@ public:
   }
   int get_sum() { return x[0] + x[1] + x[2]; }
   void rotate() {
-    rotate_180();
-    rotate_120();
+    int temp = x[0];
+    x[0] = -x[2];
+    x[2] = -x[1];
+    x[1] = -temp;
   }
   int get_key() {
     int key = 0;
-    key += (x[0] + 8) << 8;
+    key += (x[0] - 1 + 8) << 8;
     key += (x[1] + 8) << 4;
     key += (x[2] + 8);
     return key;
@@ -158,7 +156,7 @@ bool search_and_insert(Pizza ori_pizza) {
   int cnt = ori_pizza.getcnt();
   for (int i = 0; i < 6; i++) {     // rotate enum
     for (int j = 0; j < cnt; j++) { // move enum
-      if (ori_pizza.get_pizza(j).get_sum() != 0)
+      if (ori_pizza.get_pizza(j).get_sum() != 1)
         continue;
       ori_pizza.move_to_ori(j);
       Hash hash_pizza(ori_pizza); // hash_pizza有序集合
@@ -198,7 +196,7 @@ int output[] = {0,1,1,1,4,6,19,43,120,307,866,2336,6588,18373,52119,147700,42201
 int main() {
   if (make_table) {
     Pizza st_pizza;
-    Triangle ori_triangle;
+    Triangle ori_triangle(1,0,0);
     st_pizza.add_triangle(ori_triangle); //
     dfs(st_pizza);
     for (int i = 1; i < maxx; i++)
