@@ -1,0 +1,27 @@
+remote_host    10.68.12.145
+remote_user    wangxinpeng
+remote_port    22
+remote_path    /home/C/wangxinpeng/heart_beat
+local_path      /home/skt1faker/my_procedure/acm-icpc/match_heart
+ignore_path     ["mm","wprofess_needresult","result_dir","split_pic","empty","split.py",".git"]   
+ignore_dotfiles 1
+auto_sync_up    1
+remote_or_local remote
+sleep_before_sync 0
+
+# 如果ignore_path没有需要不访问的地址的话，这里就写为[]就行,否则写为["relative path"]
+
+# remote_user username to connect with
+# remote_passwd password to connect with (requires sshpass) (needed if not using ssh-keys)
+# remote_port remote ssh port to connect to (default is 22)
+# local_path local folder to be synced (defaults to folder of .vim-arsync)
+# ignore_path list of ingored files/folders
+# ignore_dotfiles set to 1 to not sync dotfiles (e.g. .vim-arsync)
+# auto_sync_up set to 1 for activating automatic upload syncing on file save
+# remote_or_local set to 'local' if you want to perform syncing localy
+# sleep_before_sync set to x seconds if you want to sleep before sync(like compiling a file before syncing)    
+# remote_host remote host to connect (must have ssh enabled)
+# remote_path remote folder to be synced
+
+
+

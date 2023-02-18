@@ -1,0 +1,4 @@
+if(set1 | set[i] == all)
+if(set[i] | set1 == all){
+    dp[i][set1 | set[i]] = dp[i - 1][set1] + 1;
+}
