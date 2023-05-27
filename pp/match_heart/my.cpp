@@ -1,64 +1,96 @@
-#include <algorithm>
-#include <cstring>
-#include <iostream>
-#include <queue>
-#include <vector>
+#include<bits/stdc++.h>
+#include <cmath>
+#include <type_traits>
+
 using namespace std;
-const long long  maxx = 105;
-struct DP {
-  long long data;
-  long long  remain[maxx];
-} dp[maxx][maxx];
-int main() {
-  long long n, k, d;
-  scanf("%lld%lld%lld", &n, &k, &d);
-  vector<long long> ele[maxx];
-  for (long long i = 0; i < n; i++) {
-    long long temp;
-    scanf("%lld", &temp);
-    ele[temp % d].push_back(temp);
+int n;
+const int maxx = (int )1e5 + 10;
+struct Node{
+  int dist;
+  int color;
+  int fa; // 前一个节点是什么
+  Node():dist(-1),color(-1),fa(-1){}
+}node[maxx];
+
+struct Edge
+{
+  Edge(int to, int color):to(to),color(color){}
+  int to,color;
+};
+vector<Edge>graph[maxx];
+
+int vis_n = false;
+void output(int posi)
+{
+  if(posi == n){
+    return ;
   }
-  for (long long  i = 0; i < d; i++) {
-    sort(ele[i].begin(), ele[i].end());
+  if(posi == -1){
+    return ;
   }
-  //memset(dp, -1, sizeof(dp));
-  dp[0][0].data = 0;
-  for (long long  j = 0; j < d; j++) {
-    dp[0][0].remain[j] = ele[j].size();
-  }
-  for(int j = 1;j < d;j++){
-    dp[0][j].data = -1;
-  }
-  for (long long  i = 1; i <= k; i++) {
-    for (long long  j = 0; j < d; j++) {
-      dp[i][j].data = -1;
-      memset(dp[i][j].remain,0,sizeof(dp[i][j].remain));
-      long long  posi_use = -1;
-      long long  posi_jj = -1;
-      long long ans = -1;
-      for (long long  jj = 0; jj < d; jj++) {
-        long long  need_check = (j - jj + d) % d;
-        if (dp[i - 1][jj].data == -1)
-          continue;
-        if (dp[i - 1][jj].remain[need_check] <= 0)
-          continue;
-        if (ans < dp[i - 1][jj].data +
-                      ele[need_check][dp[i - 1][jj].remain[need_check] - 1]) {
-          ans = dp[i - 1][jj].data +
-                ele[need_check][dp[i - 1][jj].remain[need_check] - 1];
-          posi_use = need_check;
-          posi_jj = jj;
-        }
+  cout<<node[posi].color << ' ';
+  output(node[posi].fa);
+}
+void bfs(int st,int en)
+{
+  queue<int> q;
+  node[st].dist = 0;
+  q.push(st);
+  while(!q.empty()){
+    int now_point = q.front();
+    q.pop();
+    for(Edge next_edge:graph[now_point]){
+      int next_point = next_edge.to;
+      int color = next_edge.color;
+      if(node[next_point].dist == -1){
+        node[next_point].dist = node[now_point].dist + 1;
+        node[next_point].fa = now_point;
+        node[next_point].color = color;
+        q.push(next_point);
       }
-      if (posi_use == -1)
-        continue;
-      dp[i][j].data = ans;
-      for (long long  jj = 0; jj < d; jj++) {
-        dp[i][j].remain[jj] = dp[i - 1][posi_jj].remain[jj] - (jj == posi_use);
+      else if(node[next_point].dist == node[now_point].dist + 1){
+        //cout<<next_point<<' '<<now_point<<endl;
+        int now_color = color;
+        int other_color = node[next_point].color;
+        int pre_other = node[next_point].fa;
+        int pre_now = now_point;
+        while(other_color == now_color &&(pre_now != -1 || pre_other != -1)){ 
+          now_color = node[pre_now].color;
+          other_color = node[pre_other].color;
+          pre_now = node[pre_now].fa;
+          pre_other = node[pre_other].fa;
+        }
+        if(now_color < other_color){
+          node[next_point].fa = now_point;
+          node[next_point].color = color;
+        }
       }
     }
   }
-  printf("%lld\n", dp[k][0].data);
+  cout<<node[en].dist<<endl;
+  output(en);
+  cout<<endl;
+}
+
+int main()
+{
+  int m;
+
+  while(cin>>n>>m){
+    for(int i = 1;i <= n;i++){
+      graph[i].clear();
+      node[i].fa = -1;
+      node[i].dist = -1;
+      node[i].color = -1;
+    }
+    while(m--){
+      int a,b,c;
+      scanf("%d%d%d",&a,&b,&c);
+      graph[a].push_back(Edge(b,c));
+      graph[b].push_back(Edge(a,c));
+    }
+    bfs(n,1);
+  }
   return 0;
 }
 

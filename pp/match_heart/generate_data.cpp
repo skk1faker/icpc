@@ -9,14 +9,18 @@ bool justify(int i, int x[]) {
 }
 int main() {
   srand((int)time(0));
-  int n,k,d;
+  int n,m;
+  int a,b,c;
   n = rand() % 100 + 1;
-  k = rand() % n + 1;
-  d = rand() % 100;
-  printf("%d %d %d\n",n,k,d);
-  for(int i =0 ;i < n;i++){
-    int temp = rand() % ((int)1e9 + 1);
-    printf("%d ",temp);
+  m = rand() % (n * 10) + 1;
+  n = 100000;
+  m = 200000;
+  printf("%d %d\n",n,m);
+  for(int i =0 ;i < m;i++){
+    int temp = rand()%n +1;
+    int temp_2 = rand()%n +1;
+    int temp_3 = rand()%((int)1e9) +1;
+    printf("%d %d %d\n",temp,temp_2,temp_3);
   }
 
 }
